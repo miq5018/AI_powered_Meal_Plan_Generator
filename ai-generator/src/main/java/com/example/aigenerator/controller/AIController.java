@@ -16,8 +16,8 @@ public class AIController {
     AIService aiService;
 
     @GetMapping("/generate")
-    public String getResponse(@RequestParam(defaultValue = "Regular diet") String dietType, @RequestParam int calories){
-        return aiService.response(dietType, calories);
+    public String getResponse(@RequestParam String dietType, @RequestParam int calories, @RequestParam String mealTimeString, @RequestParam String snackTimeString, @RequestParam String allergySelectedItems, @RequestParam String dislikeSelectedItems){
+        return aiService.response(dietType, calories, mealTimeString, snackTimeString, allergySelectedItems, dislikeSelectedItems);
     }
     
 }

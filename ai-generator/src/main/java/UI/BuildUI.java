@@ -1,9 +1,7 @@
-package UI;
+package ui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -39,14 +37,12 @@ public class BuildUI extends JFrame{
         revalidate();
         repaint();
     }
-
-    /*
+    
     void showMealPlanPanel() {
         currentPanel = new MealPlanPanel(this);
         setContentPane(currentPanel);
         revalidate();
         repaint();
     }
-    */
 }
 
