@@ -1,4 +1,4 @@
-package ui;
+package com.example.aigenerator.ui;
 
 import java.awt.Dimension;
 import java.awt.Font;

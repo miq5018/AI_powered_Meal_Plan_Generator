@@ -1,20 +1,10 @@
-package ui;
+package com.example.aigenerator.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -27,17 +17,17 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
+import com.example.aigenerator.model.MealPlan;
+import com.example.aigenerator.services.MealPlanService;
+
 
 
 public class DietPanel extends JPanel{
     public String dietType;
+    public String cuisine;
     public int calories;
     public String mealTimeString;
     public String snackTimeString;
-    public String encodedDietType;
-    public String encodedAllergySelectedItems;
-    public String encodedDislikeSelectedItems;
-    public StringBuilder response;
 
     
     public DietPanel(BuildUI parentFrame) {
@@ -63,6 +53,20 @@ public class DietPanel extends JPanel{
 
         dietPanel.add(dietLabel);
         dietPanel.add(dietComboBox);
+
+        //Cuisine comboBox
+        JPanel cuisinePanel = new JPanel();
+        cuisinePanel.setBackground(new Color(228, 234, 245));
+        JLabel cuisineLabel = new JLabel();
+        cuisineLabel.setText("Preferred Cuisine: ");
+        cuisineLabel.setFont(new Font("SERIF", Font.PLAIN, 25));
+
+        String[] Cuisines = {" ", "American", "Chinese", "Greek", "Indian", "Italian", "Japanese", "Korean", "Mexican", "Thai", "Vietnamese"};
+        JComboBox<String> cuisineComboBox = new JComboBox<>(Cuisines);
+        cuisineComboBox.setFont(new Font("COURIER", Font.PLAIN, 20));
+
+        cuisinePanel.add(cuisineLabel);
+        cuisinePanel.add(cuisineComboBox);
 
 
         //Calorie TextFieldx
@@ -168,6 +172,9 @@ public class DietPanel extends JPanel{
                 dietType = (String) dietComboBox.getSelectedItem();
                 System.out.println(dietType);
 
+                cuisine = (String) cuisineComboBox.getSelectedItem();
+                System.out.println(cuisine);
+
                 calories = Integer.parseInt(calorieTextField.getText());
                 System.out.println(calories);
 
@@ -201,75 +208,10 @@ public class DietPanel extends JPanel{
                 }
                 System.out.println(dislikeSelectedItems.toString());
 
-                try {
-                    encodedDietType = URLEncoder.encode(dietType, "UTF-8");
-                } catch (UnsupportedEncodingException e1) {
-                    e1.printStackTrace();
-                }
-                try {
-                    encodedAllergySelectedItems = URLEncoder.encode(allergySelectedItems.toString(), "UTF-8");
-                } catch (UnsupportedEncodingException e1) {
-                    e1.printStackTrace();
-                }
-                try {
-                    encodedDislikeSelectedItems = URLEncoder.encode(dislikeSelectedItems.toString(), "UTF-8");
-                } catch (UnsupportedEncodingException e1) {
-                    e1.printStackTrace();
-                }
 
-                String apiUrl = "http://localhost:8080/api/v1/generate?dietType=" + encodedDietType + 
-                                "&calories=" + calories + "&mealTimeString=" + mealTimeString + 
-                                "&snackTimeString=" + snackTimeString + "&allergySelectedItems=" + encodedAllergySelectedItems + 
-                                "&dislikeSelectedItems=" + encodedDislikeSelectedItems;
-                try {
-                    URL url = new URL(apiUrl);
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestMethod("GET");
-
-                    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                    String inputLine;
-                    response = new StringBuilder();
-
-                    while ((inputLine = in.readLine()) != null) {
-                        response.append(inputLine);
-                    }
-                    in.close();
-
-                    // Handle the response if needed
-                    System.out.println(response.toString());
-
-                    /*
-                    try (FileWriter fileWriter = new FileWriter("src/main/resources/mealPlan.json")) {
-                            fileWriter.write(response.toString());
-                    } catch (IOException ioe) {
-                        ioe.printStackTrace();
-                    }
-                    */
-
-                    Pattern pattern = Pattern.compile("content='(.*?)'", Pattern.DOTALL);
-                    Matcher matcher = pattern.matcher(response.toString());
-
-                    // Check if pattern is found
-                    if (matcher.find()) {
-                        String jsonContent = matcher.group(1);
-
-                        // Write the extracted JSON content to a file
-                        try (FileWriter fileWriter = new FileWriter("src/main/resources/mealPlan.json")) {
-                            fileWriter.write(jsonContent);
-                            System.out.println("JSON content saved to file successfully.");
-                        } catch (IOException ioe) {
-                            ioe.printStackTrace();
-                        }
-                    } else {
-                        System.out.println("JSON content not found in the response.");
-                    }
-
-                    connection.disconnect();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-
-                parentFrame.showMealPlanPanel();
+                MealPlan jsonResponse = MealPlanService.generateMealPlan(dietType, cuisine, calories, mealTimeString, snackTimeString, allergySelectedItems.toString(), dislikeSelectedItems.toString());
+                
+                parentFrame.showMealPlanPanel(jsonResponse);
             }
         });
 
@@ -281,6 +223,8 @@ public class DietPanel extends JPanel{
         add(dietHeaderLabel);
         add(Box.createRigidArea(new Dimension(0, 30)));
         add(dietPanel);
+        add(Box.createRigidArea(new Dimension(0, 30)));
+        add(cuisinePanel);
         add(Box.createRigidArea(new Dimension(0, 30)));
         add(caloriePanel);
         add(Box.createRigidArea(new Dimension(0, 30)));

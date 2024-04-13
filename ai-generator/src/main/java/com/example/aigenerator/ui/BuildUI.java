@@ -1,9 +1,11 @@
-package ui;
+package com.example.aigenerator.ui;
 
 import java.awt.Color;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import com.example.aigenerator.model.MealPlan;
 
 public class BuildUI extends JFrame{
     private JPanel currentPanel;
@@ -37,9 +39,10 @@ public class BuildUI extends JFrame{
         revalidate();
         repaint();
     }
-    
-    void showMealPlanPanel() {
-        currentPanel = new MealPlanPanel(this);
+
+    void showMealPlanPanel(MealPlan responseJson) {
+        currentPanel = new MealPlanPanel(this, responseJson);
+        currentPanel.setBackground(new Color(228, 234, 245));
         setContentPane(currentPanel);
         revalidate();
         repaint();

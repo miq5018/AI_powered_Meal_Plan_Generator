@@ -1,0 +1,41 @@
+
+{
+    "meal_plan": [
+        {
+          "meal_name": "Breakfast",
+          "dishes": "Oatmeal with berries and almonds",
+          "portion_size": "1 cup cooked oatmeal, 1/2 cup mixed berries, 1 tbsp sliced almonds"
+        },
+        {
+          "meal_name": "Morning Snack",
+          "dishes": "Apple slices with peanut butter",
+          "portion_size": "1 medium apple, 1 tbsp peanut butter"
+        },
+        {
+          "meal_name": "Lunch",
+          "dishes": "Quinoa salad with grilled chicken",
+          "portion_size": "1 cup quinoa salad, 3 oz grilled chicken breast"
+        },
+        {
+          "meal_name": "Afternoon Snack",
+          "dishes": "Carrot sticks with hummus",
+          "portion_size": "1 cup carrot sticks, 2 tbsp hummus"
+        },
+        {
+          "meal_name": "Dinner",
+          "dishes": "Salmon with quinoa and roasted vegetables",
+          "portion_size": "4 oz grilled salmon, 1/2 cup cooked quinoa, 1 cup roasted vegetables (ex: bell peppers, zucchini, carrots)"
+        }
+    ],
+    "daily_total": 
+        {
+            "calories": "1325 kcals",
+            "protein": "130 g",
+            "fiber": "30 g",
+            "carbs": "154 g",
+            "fat": "46 g"
+        }
+    
+}
+
+  
