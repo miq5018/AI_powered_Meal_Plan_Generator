@@ -1,8 +1,12 @@
 package com.example.aigenerator.ui;
 
+import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -20,13 +24,13 @@ public class MealPlanPanel extends JPanel {
         JLabel mealPlanHeaderLabel = new JLabel("Here is Your One-Day Meal Plan");
         mealPlanHeaderLabel.setFont(new Font("SANS_SERIF", Font.BOLD, 30));
         mealPlanHeaderLabel.setAlignmentX(CENTER_ALIGNMENT);
+        add(mealPlanHeaderLabel);
+
 
         //Meal Labels
-        JTextArea mealText = new JTextArea();
-        mealText.setEditable(false);
-
-        StringBuilder meals = new StringBuilder(); 
         for(int i = 0; i < responseJson.getMealPlan().size(); i++){
+            JLabel mealLabel = new JLabel();
+            StringBuilder meals = new StringBuilder(); 
             meals.append("Meal/Snack: ");
             meals.append(responseJson.getMealPlan().get(i).getMealName());
             meals.append("\n");
@@ -36,12 +40,10 @@ public class MealPlanPanel extends JPanel {
             meals.append("Portion Size: ");
             meals.append(responseJson.getMealPlan().get(i).getPortionSize());
             meals.append("\n");
+            mealLabel.setText(meals.toString());
+            add(mealLabel);
         }
         
-        mealText.setText(meals.toString());
-        JScrollPane scrollPaneMeal = new JScrollPane(mealText);
-
-
         JTextArea nutritionText = new JTextArea();
         nutritionText.setEditable(false);
 
@@ -66,8 +68,21 @@ public class MealPlanPanel extends JPanel {
         nutritionText.setText(nutritionInfo.toString());
         JScrollPane scrollPaneNutrition = new JScrollPane(nutritionText);
 
-        add(mealPlanHeaderLabel);
-        add(scrollPaneMeal);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(new Color(228, 234, 245));
+        JButton startOverButton = new JButton();
+        startOverButton.setText("Startover");
+        startOverButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                parentFrame.showLaunchPanel();
+            }
+        });
+
+
+        buttonPanel.add(startOverButton);
+
         add(scrollPaneNutrition);
+        add(buttonPanel);
     }
 }
