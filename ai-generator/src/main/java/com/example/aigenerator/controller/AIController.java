@@ -17,7 +17,12 @@ public class AIController {
 
     @GetMapping("/generate")
     public String getResponse(@RequestParam String dietType, @RequestParam String cuisine, @RequestParam int calories, @RequestParam String mealTimeString, @RequestParam String snackTimeString, @RequestParam String allergySelectedItems, @RequestParam String dislikeSelectedItems){
-        return aiService.response(dietType, cuisine, calories, mealTimeString, snackTimeString, allergySelectedItems, dislikeSelectedItems);
+        //if(Integer.parseInt(mealTimeString) > 3 || Integer.parseInt(snackTimeString) > 3){
+            return aiService.response2(dietType, cuisine, calories, mealTimeString, snackTimeString, allergySelectedItems, dislikeSelectedItems);
+        //}
+        //else{
+           // return aiService.response(dietType, cuisine, calories, mealTimeString, snackTimeString, allergySelectedItems, dislikeSelectedItems);
+        //}
     }
     
 }

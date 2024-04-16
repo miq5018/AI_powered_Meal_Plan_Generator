@@ -1,10 +1,14 @@
 package com.example.aigenerator.ui;
 
 import java.awt.Color;
+import java.awt.GridBagLayout;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.example.aigenerator.model.DietPreferences;
 import com.example.aigenerator.model.MealPlan;
 
 public class BuildUI extends JFrame{
@@ -40,12 +44,23 @@ public class BuildUI extends JFrame{
         repaint();
     }
 
-    void showMealPlanPanel(MealPlan responseJson) {
-        currentPanel = new MealPlanPanel(this, responseJson);
+    public void showMealPlanPanel(MealPlan responseJson, DietPreferences userPreferences) {
+        currentPanel = new MealPlanPanel(this, responseJson, userPreferences);
         currentPanel.setBackground(new Color(228, 234, 245));
         setContentPane(currentPanel);
         revalidate();
         repaint();
+    }
+
+    public void showLoading(boolean show) {
+        JPanel loadingPanel = new JPanel(new GridBagLayout());
+        loadingPanel.setOpaque(false); 
+        ImageIcon loadingIcon = new ImageIcon("src/main/resources/loading.gif"); 
+        JLabel loadingLabel = new JLabel(loadingIcon);
+        loadingPanel.add(loadingLabel);
+
+        setGlassPane(loadingPanel);
+        loadingPanel.setVisible(show);
     }
 }
 

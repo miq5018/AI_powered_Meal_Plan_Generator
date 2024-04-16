@@ -1,28 +1,39 @@
 package com.example.aigenerator.ui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
+import com.example.aigenerator.model.DietPreferences;
 import com.example.aigenerator.model.MealPlan;
+
 import com.example.aigenerator.services.MealPlanService;
+import com.example.aigenerator.services.MealPlanWorker;
 
 
 public class DietPanel extends JPanel{
@@ -31,6 +42,7 @@ public class DietPanel extends JPanel{
     public int calories;
     public String mealTimeString;
     public String snackTimeString;
+    public MealPlan jsonResponse;
 
     
     public DietPanel(BuildUI parentFrame) {
@@ -138,8 +150,10 @@ public class DietPanel extends JPanel{
         JLabel allergyLable = new JLabel();
         allergyLable.setText("Food Allergy/Intolerence: ");
         allergyLable.setFont(new Font("SERIF", Font.PLAIN, 25));
+
+        allergyLable.setToolTipText("Use Command to do multi-selections.");
     
-        String[] allergyFoods = {"Eggs", "Fish", "Gluten", "Lactose", "Mango", "Milk", "Peach", "Peanuts", "Sesame", "Shellfish", "Soy", "Tree nuts", "Wheat"};
+        String[] allergyFoods = {"None", "Eggs", "Fish", "Gluten", "Lactose", "Mango", "Milk", "Peach", "Peanuts", "Sesame", "Shellfish", "Soy", "Tree nuts", "Wheat"};
         JList<String> allergyFoodList = new JList<>(allergyFoods);
         allergyFoodList.setFont(new Font("ARIAL", Font.PLAIN, 15));
         allergyFoodList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -158,7 +172,7 @@ public class DietPanel extends JPanel{
         dislikeLable.setText("Disliked Foods: ");
         dislikeLable.setFont(new Font("SERIF", Font.PLAIN, 25));
 
-        String[] dislikeFoods = {"Almond", "Apple", "Asparagus", "Avocado", "Basil", "Beef", "Beets", "Beans", "Bell Pepper", "Broccoli",
+        String[] dislikeFoods = {"None", "Almond", "Apple", "Asparagus", "Avocado", "Basil", "Beef", "Beets", "Beans", "Bell Pepper", "Broccoli",
                                 "Brussels Sprouts", "Carrots", "Cauliflower", "Celery", "Cheese", "Chicken", "Chickpea", "Chocolate", "Cilantro",
                                 "Cinnamon", "Coconut", "Corn", "Crab", "Duck", "Eggs", "Garlic", "Ginger", "Green Beans", "Ham", "Honey", "Kale",
                                 "Kiwi", "Lamb", "Lemon", "Lentils", "Lettuce", "Mango", "Mayonnaise", "Milk", "Mushrooms", "Oatmeal", "Olives",
@@ -194,20 +208,70 @@ public class DietPanel extends JPanel{
         generateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
+                generateButton.setEnabled(false);
+                parentFrame.showLoading(true);
+
+                
                 dietType = (String) dietComboBox.getSelectedItem();
                 System.out.println(dietType);
+
+                if(dietType == null || dietType == " "){
+                    JOptionPane.showMessageDialog(null, "Please select a diet type to proceed.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
 
                 cuisine = (String) cuisineComboBox.getSelectedItem();
                 System.out.println(cuisine);
 
+                if(cuisine == null || cuisine == " "){
+                    JOptionPane.showMessageDialog(null, "Please select a preferred cuisine to proceed.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                if(calorieTextField.getText().contains(".")){
+                    JOptionPane.showMessageDialog(null, "Please enter an integer for calories.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
                 calories = Integer.parseInt(calorieTextField.getText());
                 System.out.println(calories);
+
+                if(calories < 300 || calories > 5000){
+                    JOptionPane.showMessageDialog(null, "Calorie value is out of range. Please recheck.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
 
                 mealTimeString = (String) mealTimeComboBox.getSelectedItem();
                 System.out.println(mealTimeString);
 
+                if(mealTimeString == null || mealTimeString == " "){
+                    JOptionPane.showMessageDialog(null, "Please select a meal frequency to proceed.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
                 snackTimeString = (String) snackTimeComboBox.getSelectedItem();
                 System.out.println(snackTimeString);
+
+                if(snackTimeString == null || snackTimeString == " "){
+                    JOptionPane.showMessageDialog(null, "Please select a snack frequency to proceed.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                if(mealTimeString == "0" && snackTimeString == "0"){
+                    JOptionPane.showMessageDialog(null, "Meal and snack times cannot both be zero. Please recheck.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+
+                if(allergyFoodList.getSelectedValuesList().isEmpty() == true){
+                    JOptionPane.showMessageDialog(null, "Please select an option for Food Allergy/Intolerence.\nIf you don't have any, please select \"None\".", "Warning", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                if(allergyFoodList.getSelectedValuesList().contains("None") && allergyFoodList.getSelectedValuesList().size() > 1){
+                    JOptionPane.showMessageDialog(null, "Selection conflictation in Food Allergy/Intolerence.\nPlease check if you selected \"None\" as well as others.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
 
                 StringBuilder allergySelectedItems = new StringBuilder(); 
                 for(int i = 0; i < allergyFoodList.getSelectedValuesList().size(); i++){
@@ -221,6 +285,16 @@ public class DietPanel extends JPanel{
                 }
                 System.out.println(allergySelectedItems.toString());
 
+                if(dislikeFoodList.getSelectedValuesList().isEmpty() == true){
+                    JOptionPane.showMessageDialog(null, "Please select an option for Disliked Foods.\nIf you don't have any, please select \"None\".", "Warning", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                if(dislikeFoodList.getSelectedValuesList().contains("None") && dislikeFoodList.getSelectedValuesList().size() > 1){
+                    JOptionPane.showMessageDialog(null, "Selection conflictation in Disliked Foods.\nPlease check if you selected \"None\" as well as others.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
                 StringBuilder dislikeSelectedItems = new StringBuilder(); 
                 for(int i = 0; i < dislikeFoodList.getSelectedValuesList().size(); i++){
                     String dislikeSelectedItem = dislikeFoodList.getSelectedValuesList().get(i);
@@ -233,10 +307,30 @@ public class DietPanel extends JPanel{
                 }
                 System.out.println(dislikeSelectedItems.toString());
 
-
-                MealPlan jsonResponse = MealPlanService.generateMealPlan(dietType, cuisine, calories, mealTimeString, snackTimeString, allergySelectedItems.toString(), dislikeSelectedItems.toString());
+                DietPreferences userPreferences = new DietPreferences();
+                userPreferences.setDietType(dietType);
+                userPreferences.setCuisine(cuisine);
+                userPreferences.setCalories(calories);
+                userPreferences.setMealTimeString(mealTimeString);
+                userPreferences.setSnackTimeString(snackTimeString);
+                userPreferences.setAllergySelectedItems(allergySelectedItems.toString());
+                userPreferences.setDislikeSelectedItems(dislikeSelectedItems.toString());
                 
-                parentFrame.showMealPlanPanel(jsonResponse);
+                MealPlanWorker worker = new MealPlanWorker(userPreferences, parentFrame);
+                worker.execute();
+                /*
+                jsonResponse = MealPlanService.generateMealPlan(userPreferences);
+                
+
+                if (jsonResponse != null) {
+                    parentFrame.showLoading(false);
+                    parentFrame.showMealPlanPanel(jsonResponse, userPreferences);
+                } else {
+                    //Handle case where meal plan generation failed
+                    System.out.println("Meal plan generation failed.");
+                    generateButton.setEnabled(true);
+                }
+                */
             }
         });
 

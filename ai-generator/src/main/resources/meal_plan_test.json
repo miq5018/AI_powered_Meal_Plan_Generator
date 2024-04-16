@@ -1,0 +1,37 @@
+{
+    "meal_plan": [
+      {
+        "meal_name": "Breakfast",
+        "dishes": "Sweet potato hash with turkey sausage and spinach",
+        "portion_size": "1 cup diced sweet potatoes, 2 turkey sausage links, 1 cup spinach"
+      },
+      {
+        "meal_name": "Morning Snack",
+        "dishes": "Mixed nuts",
+        "portion_size": "1/4 cup mixed nuts"
+      },
+      {
+        "meal_name": "Lunch",
+        "dishes": "Sushi bowl with cauliflower rice, avocado, and chicken",
+        "portion_size": "1 cup cauliflower rice, 1/2 avocado, 3 oz grilled chicken"
+      },
+      {
+        "meal_name": "Afternoon Snack",
+        "dishes": "Bell pepper slices with guacamole",
+        "portion_size": "1 cup bell pepper slices, 1/4 cup guacamole"
+      },
+      {
+        "meal_name": "Dinner",
+        "dishes": "Beef stir-fry with broccoli and cauliflower rice",
+        "portion_size": "4 oz beef strips, 1 cup broccoli, 1 cup cauliflower rice"
+      }
+    ],
+    "daily_total": {
+      "calories": "2200 kcals",
+      "protein": "140 g",
+      "fiber": "40 g",
+      "carbs": "160 g",
+      "fat": "80 g"
+    }
+  }
+  
