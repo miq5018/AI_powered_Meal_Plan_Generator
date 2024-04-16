@@ -56,6 +56,8 @@ public class MealPlanService {
                                 "&calories=" + userPreferences.getCalories() + "&mealTimeString=" + userPreferences.getMealTimeString() + 
                                 "&snackTimeString=" + userPreferences.getSnackTimeString() + "&allergySelectedItems=" + encodedAllergySelectedItems + 
                                 "&dislikeSelectedItems=" + encodedDislikeSelectedItems;
+        System.out.println(apiUrl);
+        
         try {
             URL url = new URL(apiUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();

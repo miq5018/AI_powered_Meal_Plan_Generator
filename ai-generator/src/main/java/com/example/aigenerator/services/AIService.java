@@ -16,6 +16,7 @@ public class AIService {
     @Autowired
     ChatClient chatClient;
 
+    /*
     public String response(String dietType, String cuisine, int calories, String mealTimeString, String snackTimeString, String allergySelectedItems, String dislikeSelectedItems){
         String mealPlanTemplate = "";
         try {
@@ -41,9 +42,10 @@ public class AIService {
         Prompt prompt = new Prompt(promptMessage);
         return this.chatClient.call(prompt).toString();
     }
-    
+    */
 
     public String response2(String dietType, String cuisine, int calories, String mealTimeString, String snackTimeString, String allergySelectedItems, String dislikeSelectedItems){
+        
         String mealPlanTemplate = "";
         try {
             // Read the content of the JSON file into a byte array
@@ -55,7 +57,8 @@ public class AIService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        
+        
         
         String promptMessage = "Please generate a one-day healthy and balanced meal plan with portion sizes and meeting the following requirements:\n" + 
                                 "Diet Type: " + dietType + "\n" +
@@ -67,6 +70,8 @@ public class AIService {
                                 "This JSON format template contains 6 meals and 6 snacks. Please adjust the template to generate the meal plan with" + 
                                 mealTimeString + " meals and " + snackTimeString + " snacks while still meeting other requirements listed above.";
         
+        System.out.println(promptMessage);
+
         Prompt prompt = new Prompt(promptMessage);
         return this.chatClient.call(prompt).toString();
     }

@@ -1,10 +1,10 @@
-package com.example.aigenerator.services;
+package com.example.aigenerator.ui;
 
 import javax.swing.SwingWorker;
 
 import com.example.aigenerator.model.DietPreferences;
 import com.example.aigenerator.model.MealPlan;
-import com.example.aigenerator.ui.BuildUI;
+import com.example.aigenerator.services.MealPlanService;
 
 public class MealPlanWorker extends SwingWorker<MealPlan, Void> {
     private DietPreferences userPreferences;

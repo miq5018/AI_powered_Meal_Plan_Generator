@@ -20,7 +20,7 @@ import javax.swing.SwingConstants;
 import com.example.aigenerator.model.DietPreferences;
 import com.example.aigenerator.model.MealPlan;
 import com.example.aigenerator.services.MealPlanService;
-import com.example.aigenerator.services.MealPlanWorker;
+
 
 public class MealPlanPanel extends JPanel {
     MealPlan responseJson;

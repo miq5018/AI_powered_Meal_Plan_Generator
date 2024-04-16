@@ -33,7 +33,6 @@ import com.example.aigenerator.model.DietPreferences;
 import com.example.aigenerator.model.MealPlan;
 
 import com.example.aigenerator.services.MealPlanService;
-import com.example.aigenerator.services.MealPlanWorker;
 
 
 public class DietPanel extends JPanel{
@@ -316,12 +315,13 @@ public class DietPanel extends JPanel{
                 userPreferences.setAllergySelectedItems(allergySelectedItems.toString());
                 userPreferences.setDislikeSelectedItems(dislikeSelectedItems.toString());
                 
-                MealPlanWorker worker = new MealPlanWorker(userPreferences, parentFrame);
-                worker.execute();
-                /*
+                
+                //MealPlanWorker worker = new MealPlanWorker(userPreferences, parentFrame);
+                //worker.execute();
+                
+           
                 jsonResponse = MealPlanService.generateMealPlan(userPreferences);
                 
-
                 if (jsonResponse != null) {
                     parentFrame.showLoading(false);
                     parentFrame.showMealPlanPanel(jsonResponse, userPreferences);
@@ -330,7 +330,7 @@ public class DietPanel extends JPanel{
                     System.out.println("Meal plan generation failed.");
                     generateButton.setEnabled(true);
                 }
-                */
+                
             }
         });
 
