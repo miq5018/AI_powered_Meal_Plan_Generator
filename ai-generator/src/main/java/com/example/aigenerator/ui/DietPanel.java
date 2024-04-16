@@ -316,10 +316,10 @@ public class DietPanel extends JPanel{
                 userPreferences.setDislikeSelectedItems(dislikeSelectedItems.toString());
                 
                 
-                //MealPlanWorker worker = new MealPlanWorker(userPreferences, parentFrame);
-                //worker.execute();
+                MealPlanWorker worker = new MealPlanWorker(userPreferences, parentFrame);
+                worker.execute();
                 
-           
+                /*
                 jsonResponse = MealPlanService.generateMealPlan(userPreferences);
                 
                 if (jsonResponse != null) {
@@ -330,6 +330,7 @@ public class DietPanel extends JPanel{
                     System.out.println("Meal plan generation failed.");
                     generateButton.setEnabled(true);
                 }
+                */
                 
             }
         });
