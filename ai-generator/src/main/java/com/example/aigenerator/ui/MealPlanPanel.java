@@ -75,7 +75,7 @@ public class MealPlanPanel extends JPanel {
                     portionPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
                     portionPanel.setBorder(BorderFactory.createEmptyBorder(5, 50, 5, 20));
                     JLabel portionLabel = new JLabel();
-                    portionLabel.setText("Ingredients:");
+                    portionLabel.setText("Portions:");
                     portionLabel.setFont(new Font("ARIAL", Font.ITALIC, 17));
                     JLabel portionResponseLabel = new JLabel();
                     portionResponseLabel.setText(responseJson.getMeals().get(j).getPortionSize());
@@ -132,7 +132,7 @@ public class MealPlanPanel extends JPanel {
                     portionPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
                     portionPanel.setBorder(BorderFactory.createEmptyBorder(5, 50, 5, 20));
                     JLabel portionLabel = new JLabel();
-                    portionLabel.setText("Ingredients:");
+                    portionLabel.setText("Portions:");
                     portionLabel.setFont(new Font("ARIAL", Font.ITALIC, 17));
                     JLabel portionResponseLabel = new JLabel();
                     portionResponseLabel.setText(responseJson.getSnacks().get(i).getPortionSize());
