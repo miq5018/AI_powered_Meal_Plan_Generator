@@ -44,10 +44,12 @@ public class MealPlanService {
             apiUrl += "?" + queryParameters;
             System.out.println(apiUrl);
 
+            //Make an HTTP GET request to API endpoint
             URL url = new URL(apiUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-
+            
+            //Read the response from the server and put it in string
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String inputLine;
             StringBuilder response = new StringBuilder();

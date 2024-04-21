@@ -10,7 +10,15 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * This class represents the launch panel for the application.
+ */
 public class LaunchPanel extends JPanel {
+    /**
+     * Constructs a new LaunchPanel instance.
+     * 
+     * @param parentFrame The parent frame of the panel.
+     */
     public LaunchPanel(BuildUI parentFrame) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
@@ -46,6 +54,7 @@ public class LaunchPanel extends JPanel {
         quoteLabel.setFont(new Font("SERIF", Font.PLAIN, 25));
         quoteLabel.setAlignmentX(CENTER_ALIGNMENT);
 
+        //Add labels and rigid areas to the panel
         add(Box.createRigidArea(new Dimension(0, 25)));
         add(headerLabel);
         add(Box.createRigidArea(new Dimension(0, 40)));

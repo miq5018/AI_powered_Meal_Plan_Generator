@@ -19,12 +19,20 @@ import javax.swing.SwingConstants;
 
 import com.example.aigenerator.model.DietPreferences;
 import com.example.aigenerator.model.MealPlan;
-import com.example.aigenerator.services.MealPlanService;
 
-
+/**
+ * This class represents the MealPlan panel for displaying the generated meal plan.
+ */
 public class MealPlanPanel extends JPanel {
     MealPlan responseJson;
 
+    /**
+     * Constructs a MealPlanPanel with the specified parent frame, response JSON, and user preferences.
+     * 
+     * @param parentFrame The parent frame.
+     * @param responseJson The JSON response containing the meal plan.
+     * @param userPreferences The user's diet preferences.
+     */
     public MealPlanPanel(BuildUI parentFrame, MealPlan responseJson, DietPreferences userPreferences){
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -36,6 +44,7 @@ public class MealPlanPanel extends JPanel {
         add(mealPlanHeaderLabel);
         add(Box.createRigidArea(new Dimension(0, 15)));  
 
+        //Set contain panel to display the meal plan response
         JPanel containerPanel = new JPanel();
         containerPanel.setLayout(new BoxLayout(containerPanel, BoxLayout.Y_AXIS));
         containerPanel.setBackground(new Color(252,250,248));
@@ -168,7 +177,7 @@ public class MealPlanPanel extends JPanel {
         nutritionPanel.add(nutritionLabel);
         add(nutritionPanel);
 
-        //Calories Panel
+        //Set the calories panel
         JPanel panel1 = new JPanel();
         panel1.setBackground(new Color(228, 234, 245));
         panel1.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -183,6 +192,7 @@ public class MealPlanPanel extends JPanel {
         panel1.add(calorieResponseLabel);
         panel1.add(new JLabel("    "));
 
+        //Set the protein panel
         JLabel proteinLabel = new JLabel();
         proteinLabel.setText("Proteins:");
         proteinLabel.setFont(new Font("SERIF", Font.BOLD, 17));
@@ -193,6 +203,7 @@ public class MealPlanPanel extends JPanel {
         panel1.add(proteinResponseLabel);
         panel1.add(new JLabel("    "));
 
+        //Set the fat panel
         JLabel fatLabel = new JLabel();
         fatLabel.setText("Fats:");
         fatLabel.setFont(new Font("SERIF", Font.BOLD, 17));
@@ -203,6 +214,7 @@ public class MealPlanPanel extends JPanel {
         panel1.add(fatResponseLabel);
         panel1.add(new JLabel("    "));
 
+        //Set the carb panel
         JLabel carbsLabel = new JLabel();
         carbsLabel.setText("Carbohydates:");
         carbsLabel.setFont(new Font("SERIF", Font.BOLD, 17));
@@ -213,6 +225,7 @@ public class MealPlanPanel extends JPanel {
         panel1.add(carbsResponseLabel);
         panel1.add(new JLabel("    "));
 
+        //Set the fiber panel
         JLabel fiberLabel = new JLabel();
         fiberLabel.setText("Fibers:");
         fiberLabel.setFont(new Font("SERIF", Font.BOLD, 17));
@@ -238,7 +251,7 @@ public class MealPlanPanel extends JPanel {
             }
         });
 
-
+        //Set the Regenerate button
         JButton regenerateButton = new JButton();
         regenerateButton.setText("Regenerate");
         regenerateButton.setFont(new Font("SERIF", Font.PLAIN, 22));
@@ -250,16 +263,15 @@ public class MealPlanPanel extends JPanel {
                 
                 MealPlanWorker worker = new MealPlanWorker(userPreferences, parentFrame);
                 worker.execute();
-
-                //MealPlan jsonResponse = MealPlanService.generateMealPlan(userPreferences);
-                //parentFrame.showMealPlanPanel(jsonResponse, userPreferences);
             }
         });
 
+        //Add the buttons to the button panel
         buttonPanel.add(startOverButton);
         buttonPanel.add(new JLabel("                "));
         buttonPanel.add(regenerateButton);
 
+        //Add the button panel to the MealPlan panel
         add(buttonPanel);
         add(Box.createRigidArea(new Dimension(0, 10)));
     }

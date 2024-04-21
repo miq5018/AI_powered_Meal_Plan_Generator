@@ -1,28 +1,21 @@
 package com.example.aigenerator.ui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
@@ -32,9 +25,9 @@ import javax.swing.SwingConstants;
 import com.example.aigenerator.model.DietPreferences;
 import com.example.aigenerator.model.MealPlan;
 
-import com.example.aigenerator.services.MealPlanService;
-
-
+/**
+ * This class represents the diet panel for setting diet preferences in the UI.
+ */
 public class DietPanel extends JPanel{
     public String dietType;
     public String cuisine;
@@ -43,16 +36,18 @@ public class DietPanel extends JPanel{
     public String snackTimeString;
     public MealPlan jsonResponse;
 
-    
+    /**
+     * Constructs a new DietPanel instance.
+     * 
+     * @param parentFrame The parent frame of the panel.
+     */
     public DietPanel(BuildUI parentFrame) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
 
         //Set header
         JLabel dietHeaderLabel = new JLabel("Diet Preferences");
         dietHeaderLabel.setFont(new Font("SANS_SERIF", Font.BOLD, 50));
         dietHeaderLabel.setAlignmentX(CENTER_ALIGNMENT);
-
 
         //Diet comboBox
         JPanel dietPanel = new JPanel();
@@ -70,7 +65,6 @@ public class DietPanel extends JPanel{
         dietPanel.add(dietLabel);
         dietPanel.add(dietComboBox);
 
-
         //Cuisine comboBox
         JPanel cuisinePanel = new JPanel();
         cuisinePanel.setBackground(new Color(228, 234, 245));
@@ -86,7 +80,6 @@ public class DietPanel extends JPanel{
 
         cuisinePanel.add(cuisineLabel);
         cuisinePanel.add(cuisineComboBox);
-
 
         //Calorie TextFieldx
         JPanel caloriePanel = new JPanel();
@@ -109,7 +102,6 @@ public class DietPanel extends JPanel{
         caloriePanel.add(calorieTextField);
         caloriePanel.add(calorieUnitLabel);
         
-
         //Meal/Snack Times Combobox
         JPanel mealTimePanel = new JPanel();
         mealTimePanel.setBackground(new Color(228, 234, 245));
@@ -138,7 +130,6 @@ public class DietPanel extends JPanel{
         mealTimePanel.add(Box.createGlue());
         mealTimePanel.add(snackTimeLabel);
         mealTimePanel.add(snackTimeComboBox);
-
 
         //Allergy multi-select list
         JPanel allergyPanel = new JPanel();
@@ -186,7 +177,6 @@ public class DietPanel extends JPanel{
 
         allergyPanel.add(dislikeLable);
         allergyPanel.add(dislikeScrollPane);
-    
         
         //Button Panel with back and generate buttons
         JPanel buttonPanel = new JPanel();
@@ -210,68 +200,68 @@ public class DietPanel extends JPanel{
                 generateButton.setEnabled(false);
                 parentFrame.showLoading(true);
 
-                
+                //Gets the diet type selection
                 dietType = (String) dietComboBox.getSelectedItem();
                 System.out.println(dietType);
 
+                //Error popups for diet type selection
                 if(dietType == null || dietType == " "){
                     JOptionPane.showMessageDialog(null, "Please select a diet type to proceed.", "Warning", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
 
+                //Gets the cuisine selection
                 cuisine = (String) cuisineComboBox.getSelectedItem();
                 System.out.println(cuisine);
 
+                //Error popups for cuisine selection
                 if(cuisine == null || cuisine == " "){
                     JOptionPane.showMessageDialog(null, "Please select a preferred cuisine to proceed.", "Warning", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
 
+                //Gets the calorie input
+                calories = Integer.parseInt(calorieTextField.getText());
+                System.out.println(calories);
+
+                //Error popups for calorie input
                 if(calorieTextField.getText().contains(".")){
                     JOptionPane.showMessageDialog(null, "Please enter an integer for calories.", "Warning", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
-
-                calories = Integer.parseInt(calorieTextField.getText());
-                System.out.println(calories);
 
                 if(calories < 300 || calories > 5000){
                     JOptionPane.showMessageDialog(null, "Calorie value is out of range. Please recheck.", "Warning", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
 
+                //Gets the meal time selection
                 mealTimeString = (String) mealTimeComboBox.getSelectedItem();
                 System.out.println(mealTimeString);
 
+                //Error popups for meal time selection
                 if(mealTimeString == null || mealTimeString == " "){
                     JOptionPane.showMessageDialog(null, "Please select a meal frequency to proceed.", "Warning", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
 
+                //Gets the snack time selection
                 snackTimeString = (String) snackTimeComboBox.getSelectedItem();
                 System.out.println(snackTimeString);
 
+                //Error popups for snack time selection
                 if(snackTimeString == null || snackTimeString == " "){
                     JOptionPane.showMessageDialog(null, "Please select a snack frequency to proceed.", "Warning", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
 
+                //Error popups for snack and meal selections
                 if(mealTimeString == "0" && snackTimeString == "0"){
                     JOptionPane.showMessageDialog(null, "Meal and snack times cannot both be zero. Please recheck.", "Warning", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
 
-
-                if(allergyFoodList.getSelectedValuesList().isEmpty() == true){
-                    JOptionPane.showMessageDialog(null, "Please select an option for Food Allergy/Intolerence.\nIf you don't have any, please select \"None\".", "Warning", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-
-                if(allergyFoodList.getSelectedValuesList().contains("None") && allergyFoodList.getSelectedValuesList().size() > 1){
-                    JOptionPane.showMessageDialog(null, "Selection conflictation in Food Allergy/Intolerence.\nPlease check if you selected \"None\" as well as others.", "Warning", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-
+                //Gets the food allergy/intolerence selection
                 StringBuilder allergySelectedItems = new StringBuilder(); 
                 for(int i = 0; i < allergyFoodList.getSelectedValuesList().size(); i++){
                     String allergySelectedItem = allergyFoodList.getSelectedValuesList().get(i);
@@ -284,16 +274,18 @@ public class DietPanel extends JPanel{
                 }
                 System.out.println(allergySelectedItems.toString());
 
-                if(dislikeFoodList.getSelectedValuesList().isEmpty() == true){
-                    JOptionPane.showMessageDialog(null, "Please select an option for Disliked Foods.\nIf you don't have any, please select \"None\".", "Warning", JOptionPane.WARNING_MESSAGE);
+                //Error popups for food allergy/intolerence selection
+                if(allergyFoodList.getSelectedValuesList().isEmpty() == true){
+                    JOptionPane.showMessageDialog(null, "Please select an option for Food Allergy/Intolerence.\nIf you don't have any, please select \"None\".", "Warning", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
 
-                if(dislikeFoodList.getSelectedValuesList().contains("None") && dislikeFoodList.getSelectedValuesList().size() > 1){
-                    JOptionPane.showMessageDialog(null, "Selection conflictation in Disliked Foods.\nPlease check if you selected \"None\" as well as others.", "Warning", JOptionPane.WARNING_MESSAGE);
+                if(allergyFoodList.getSelectedValuesList().contains("None") && allergyFoodList.getSelectedValuesList().size() > 1){
+                    JOptionPane.showMessageDialog(null, "Selection conflictation in Food Allergy/Intolerence.\nPlease check if you selected \"None\" as well as others.", "Warning", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
 
+                //Gets the disliked food selection
                 StringBuilder dislikeSelectedItems = new StringBuilder(); 
                 for(int i = 0; i < dislikeFoodList.getSelectedValuesList().size(); i++){
                     String dislikeSelectedItem = dislikeFoodList.getSelectedValuesList().get(i);
@@ -306,6 +298,18 @@ public class DietPanel extends JPanel{
                 }
                 System.out.println(dislikeSelectedItems.toString());
 
+                //Error popups for disliked food selection
+                if(dislikeFoodList.getSelectedValuesList().isEmpty() == true){
+                    JOptionPane.showMessageDialog(null, "Please select an option for Disliked Foods.\nIf you don't have any, please select \"None\".", "Warning", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                if(dislikeFoodList.getSelectedValuesList().contains("None") && dislikeFoodList.getSelectedValuesList().size() > 1){
+                    JOptionPane.showMessageDialog(null, "Selection conflictation in Disliked Foods.\nPlease check if you selected \"None\" as well as others.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                //Set up the DietPreferences based on user's selections
                 DietPreferences userPreferences = new DietPreferences();
                 userPreferences.setDietType(dietType);
                 userPreferences.setCuisine(cuisine);
@@ -315,31 +319,18 @@ public class DietPanel extends JPanel{
                 userPreferences.setAllergySelectedItems(allergySelectedItems.toString());
                 userPreferences.setDislikeSelectedItems(dislikeSelectedItems.toString());
                 
-                
+                //Initiate a new MealPlanWorker with userPreferences and parentFrame as parameters
                 MealPlanWorker worker = new MealPlanWorker(userPreferences, parentFrame);
+                //Execute the worker in a background thread
                 worker.execute();
-                
-                /*
-                jsonResponse = MealPlanService.generateMealPlan(userPreferences);
-                
-                if (jsonResponse != null) {
-                    parentFrame.showLoading(false);
-                    parentFrame.showMealPlanPanel(jsonResponse, userPreferences);
-                } else {
-                    //Handle case where meal plan generation failed
-                    System.out.println("Meal plan generation failed.");
-                    generateButton.setEnabled(true);
-                }
-                */
-                
             }
         });
-
+        //Add the bottons to the button panel
         buttonPanel.add(backButton);
         buttonPanel.add(new JLabel("                "));
         buttonPanel.add(generateButton);
 
-
+        //Add each label to the panel as well as rigid area and separators in between
         add(Box.createRigidArea(new Dimension(0, 25)));
         add(dietHeaderLabel);
         add(Box.createRigidArea(new Dimension(0, 10)));
@@ -362,7 +353,6 @@ public class DietPanel extends JPanel{
         add(buttonPanel);
         add(Box.createRigidArea(new Dimension(0, 20)));
     }
-
 }
 
 
