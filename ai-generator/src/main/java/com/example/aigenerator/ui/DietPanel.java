@@ -198,7 +198,6 @@ public class DietPanel extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e){
                 generateButton.setEnabled(false);
-                parentFrame.showLoading(true);
 
                 //Gets the diet type selection
                 dietType = (String) dietComboBox.getSelectedItem();
@@ -207,6 +206,7 @@ public class DietPanel extends JPanel{
                 //Error popups for diet type selection
                 if(dietType == null || dietType == " "){
                     JOptionPane.showMessageDialog(null, "Please select a diet type to proceed.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    generateButton.setEnabled(true);
                     return;
                 }
 
@@ -217,6 +217,20 @@ public class DietPanel extends JPanel{
                 //Error popups for cuisine selection
                 if(cuisine == null || cuisine == " "){
                     JOptionPane.showMessageDialog(null, "Please select a preferred cuisine to proceed.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    generateButton.setEnabled(true);
+                    return;
+                }
+
+                //Error popups for calorie input
+                if(calorieTextField.getText().isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Calorie value cannot be empty. Please enter a value.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    generateButton.setEnabled(true);
+                    return;
+                }
+
+                if(calorieTextField.getText().contains(".")){
+                    JOptionPane.showMessageDialog(null, "Please enter an integer for calories.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    generateButton.setEnabled(true);
                     return;
                 }
 
@@ -224,14 +238,9 @@ public class DietPanel extends JPanel{
                 calories = Integer.parseInt(calorieTextField.getText());
                 System.out.println(calories);
 
-                //Error popups for calorie input
-                if(calorieTextField.getText().contains(".")){
-                    JOptionPane.showMessageDialog(null, "Please enter an integer for calories.", "Warning", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-
                 if(calories < 300 || calories > 5000){
                     JOptionPane.showMessageDialog(null, "Calorie value is out of range. Please recheck.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    generateButton.setEnabled(true);
                     return;
                 }
 
@@ -242,6 +251,7 @@ public class DietPanel extends JPanel{
                 //Error popups for meal time selection
                 if(mealTimeString == null || mealTimeString == " "){
                     JOptionPane.showMessageDialog(null, "Please select a meal frequency to proceed.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    generateButton.setEnabled(true);
                     return;
                 }
 
@@ -252,12 +262,14 @@ public class DietPanel extends JPanel{
                 //Error popups for snack time selection
                 if(snackTimeString == null || snackTimeString == " "){
                     JOptionPane.showMessageDialog(null, "Please select a snack frequency to proceed.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    generateButton.setEnabled(true);
                     return;
                 }
 
                 //Error popups for snack and meal selections
                 if(mealTimeString == "0" && snackTimeString == "0"){
                     JOptionPane.showMessageDialog(null, "Meal and snack times cannot both be zero. Please recheck.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    generateButton.setEnabled(true);
                     return;
                 }
 
@@ -277,11 +289,13 @@ public class DietPanel extends JPanel{
                 //Error popups for food allergy/intolerence selection
                 if(allergyFoodList.getSelectedValuesList().isEmpty() == true){
                     JOptionPane.showMessageDialog(null, "Please select an option for Food Allergy/Intolerence.\nIf you don't have any, please select \"None\".", "Warning", JOptionPane.WARNING_MESSAGE);
+                    generateButton.setEnabled(true);
                     return;
                 }
 
                 if(allergyFoodList.getSelectedValuesList().contains("None") && allergyFoodList.getSelectedValuesList().size() > 1){
                     JOptionPane.showMessageDialog(null, "Selection conflictation in Food Allergy/Intolerence.\nPlease check if you selected \"None\" as well as others.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    generateButton.setEnabled(true);
                     return;
                 }
 
@@ -301,11 +315,13 @@ public class DietPanel extends JPanel{
                 //Error popups for disliked food selection
                 if(dislikeFoodList.getSelectedValuesList().isEmpty() == true){
                     JOptionPane.showMessageDialog(null, "Please select an option for Disliked Foods.\nIf you don't have any, please select \"None\".", "Warning", JOptionPane.WARNING_MESSAGE);
+                    generateButton.setEnabled(true);
                     return;
                 }
 
                 if(dislikeFoodList.getSelectedValuesList().contains("None") && dislikeFoodList.getSelectedValuesList().size() > 1){
                     JOptionPane.showMessageDialog(null, "Selection conflictation in Disliked Foods.\nPlease check if you selected \"None\" as well as others.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    generateButton.setEnabled(true);
                     return;
                 }
 
@@ -318,6 +334,8 @@ public class DietPanel extends JPanel{
                 userPreferences.setSnackTimeString(snackTimeString);
                 userPreferences.setAllergySelectedItems(allergySelectedItems.toString());
                 userPreferences.setDislikeSelectedItems(dislikeSelectedItems.toString());
+
+                parentFrame.showLoading(true);
                 
                 //Initiate a new MealPlanWorker with userPreferences and parentFrame as parameters
                 MealPlanWorker worker = new MealPlanWorker(userPreferences, parentFrame);

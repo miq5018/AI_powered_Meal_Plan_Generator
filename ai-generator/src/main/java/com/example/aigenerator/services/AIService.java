@@ -54,7 +54,7 @@ public class AIService {
                                 "Cuisine: " + cuisine + "\n" +
                                 "Calorie Needs: " + calories + " kcals/day\n" + 
                                 "Food Allergies/Intolerance: " + allergySelectedItems + ", please do not include these or related foods\n" +
-                                "Disliked food: " + dislikeSelectedItems + ", please do not include these or related foods" + 
+                                "Disliked food: " + dislikeSelectedItems + ", please do not include these or related foods\n" + 
                                 "Please respond following this JSON format:" + mealPlanTemplate + "\n" + 
                                 "This JSON format template contains 6 meals and 6 snacks. Please adjust the template to generate the meal plan with " + 
                                 mealTimeString + " meals and " + snackTimeString + " snacks while still meeting other requirements listed above.";
