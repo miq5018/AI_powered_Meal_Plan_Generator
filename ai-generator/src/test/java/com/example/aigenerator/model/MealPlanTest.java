@@ -7,7 +7,11 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * This class tests the methods in the MealPlan class.
+ */
 class MealPlanTest {
+
   MealPlan test1;
   MealPlan test2;
 
@@ -29,7 +33,8 @@ class MealPlanTest {
   void setUp() {
     test1 = new MealPlan();
     meal1 = new Meal("Breakfast", "Veggie Omelette", "2 eggs, 1 cup veggies");
-    meal2 = new Meal("Lunch", "Grilled Chicken with Zucchini", "4 oz grilled chicken, 1 cup zucchini");
+    meal2 = new Meal("Lunch", "Grilled Chicken with Zucchini",
+        "4 oz grilled chicken, 1 cup zucchini");
     meal3 = new Meal("Dinner", "Fish and Chips", "1 cup fish, 1 cup chips");
     snack1 = new Snack("Morning Snack", "Greek Yogurt", "1 cup yogurt");
     snack2 = new Snack("Afternoon Snack", "Banana", "1 medium banana");

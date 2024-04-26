@@ -5,7 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * This class tests the methods in the Meal class.
+ */
 class MealTest {
+
   Meal meal1;
   Meal meal2;
 

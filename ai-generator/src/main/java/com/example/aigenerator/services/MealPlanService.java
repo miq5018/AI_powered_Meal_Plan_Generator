@@ -15,74 +15,79 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 /**
- * Service class responsible for generating a meal plan based on user preferences by calling an API.
+ * Service class responsible for generating a meal plan based on user preferences by calling an
+ * API.
  */
 public class MealPlanService {
-    /**
-     * Generates a meal plan based on the provided user preferences by calling an API.
-     *
-     * @param userPreferences The user's preferences for generating the meal plan.
-     * @return The generated meal plan.
-     */
-    public static MealPlan generateMealPlan(DietPreferences userPreferences){
-        String jsonContent;
-        MealPlan responseJson;
-    
-        String apiUrl = "http://localhost:8080/api/v1/generate";
 
-        try {
-            //Encode the DietPreferences object into query parameters
-            String queryParameters = "dietType=" + URLEncoder.encode(userPreferences.getDietType(), "UTF-8") +
-                        "&cuisine=" + URLEncoder.encode(userPreferences.getCuisine(), "UTF-8") +
-                        "&calories=" + userPreferences.getCalories() +
-                        "&mealTimeString=" + URLEncoder.encode(userPreferences.getMealTimeString(), "UTF-8") +
-                        "&snackTimeString=" + URLEncoder.encode(userPreferences.getSnackTimeString(), "UTF-8") +
-                        "&allergySelectedItems=" + URLEncoder.encode(userPreferences.getAllergySelectedItems(), "UTF-8") +
-                        "&dislikeSelectedItems=" + URLEncoder.encode(userPreferences.getDislikeSelectedItems(), "UTF-8");
+  /**
+   * Generates a meal plan based on the provided user preferences by calling an API.
+   *
+   * @param userPreferences The user's preferences for generating the meal plan.
+   * @return The generated meal plan.
+   */
+  public static MealPlan generateMealPlan(DietPreferences userPreferences) {
+    String jsonContent;
+    MealPlan responseJson;
 
-            //Append the query parameters to the URL
-            apiUrl += "?" + queryParameters;
-            System.out.println(apiUrl);
+    String apiUrl = "http://localhost:8080/api/v1/generate";
 
-            //Make an HTTP GET request to API endpoint
-            URL url = new URL(apiUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            
-            //Read the response from the server and put it in string
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
+    try {
+      //Encode the DietPreferences object into query parameters
+      String queryParameters =
+          "dietType=" + URLEncoder.encode(userPreferences.getDietType(), "UTF-8") +
+              "&cuisine=" + URLEncoder.encode(userPreferences.getCuisine(), "UTF-8") +
+              "&calories=" + userPreferences.getCalories() +
+              "&mealTimeString=" + URLEncoder.encode(userPreferences.getMealTimeString(), "UTF-8") +
+              "&snackTimeString=" + URLEncoder.encode(userPreferences.getSnackTimeString(), "UTF-8")
+              +
+              "&allergySelectedItems=" + URLEncoder.encode(
+              userPreferences.getAllergySelectedItems(), "UTF-8") +
+              "&dislikeSelectedItems=" + URLEncoder.encode(
+              userPreferences.getDislikeSelectedItems(), "UTF-8");
 
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
+      //Append the query parameters to the URL
+      apiUrl += "?" + queryParameters;
+      System.out.println(apiUrl);
 
-            //Handle the response
-            System.out.println(response.toString());
+      //Make an HTTP GET request to API endpoint
+      URL url = new URL(apiUrl);
+      HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+      connection.setRequestMethod("GET");
 
-            //Parse the response based on a certain format
-            Pattern pattern = Pattern.compile("content='(.*?)'", Pattern.DOTALL);
-            Matcher matcher = pattern.matcher(response.toString());
+      //Read the response from the server and put it in string
+      BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+      String inputLine;
+      StringBuilder response = new StringBuilder();
 
-            //Check if pattern is found
-            if (matcher.find()) {
-                jsonContent = matcher.group(1);
-            }
-            else{
-                return null;
-            }
-            ObjectMapper objectMapper = new ObjectMapper();
-            responseJson = objectMapper.readValue(jsonContent, MealPlan.class);
-    
-            connection.disconnect();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
+      while ((inputLine = in.readLine()) != null) {
+        response.append(inputLine);
+      }
+      in.close();
 
-        return responseJson;
+      //Handle the response
+      System.out.println(response.toString());
+
+      //Parse the response based on a certain format
+      Pattern pattern = Pattern.compile("content='(.*?)'", Pattern.DOTALL);
+      Matcher matcher = pattern.matcher(response.toString());
+
+      //Check if pattern is found
+      if (matcher.find()) {
+        jsonContent = matcher.group(1);
+      } else {
+        return null;
+      }
+      ObjectMapper objectMapper = new ObjectMapper();
+      responseJson = objectMapper.readValue(jsonContent, MealPlan.class);
+
+      connection.disconnect();
+    } catch (IOException ex) {
+      ex.printStackTrace();
+      return null;
     }
-    
+
+    return responseJson;
+  }
+
 }

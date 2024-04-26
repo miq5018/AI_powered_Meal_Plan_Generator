@@ -8,12 +8,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public class AiGeneratorApplication {
-	/**
-     * Main method to start the Spring Boot application.
-     * @param args Command line arguments.
-     */
-	public static void main(String[] args) {
-		SpringApplication.run(AiGeneratorApplication.class, args);
-	}
+
+  /**
+   * Main method to start the Spring Boot application.
+   *
+   * @param args Command line arguments.
+   */
+  public static void main(String[] args) {
+    SpringApplication.run(AiGeneratorApplication.class, args);
+  }
 }
 

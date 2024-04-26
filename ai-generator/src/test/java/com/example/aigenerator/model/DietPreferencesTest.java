@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * This class tests the methods of the DietPreferences class.
+ */
 class DietPreferencesTest {
 
   DietPreferences test1;
@@ -15,7 +18,8 @@ class DietPreferencesTest {
   @BeforeEach
   void setUp() {
     test1 = new DietPreferences("DASH Diet", "Greek", 1800, "2", "1", "None", "Spinach, Walnuts");
-    test2 = new DietPreferences("Vegan Diet", "Indian", 2500, "1", "6", "Eggs, Gluten, Soy", "None");
+    test2 = new DietPreferences("Vegan Diet", "Indian", 2500, "1", "6", "Eggs, Gluten, Soy",
+        "None");
     test3 = new DietPreferences();
   }
 
