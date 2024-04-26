@@ -31,6 +31,7 @@ public class MealPlan {
     public MealPlan(List<Meal> meals, List<Snack> snacks, NutritionInfo dailyTotal){
         this.meals = meals;
         this.dailyTotal = dailyTotal;
+        this.snacks = snacks;
     }
 
     /**
